@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike Colombia | Tienda Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .category-bg-1 {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .category-bg-2 {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .category-bg-3 {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1556906781-9a412961c28c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        .hidden { display: none; }
+        .block { display: block; }
+        .size-selected {
+            background-color: #000;
+            color: #fff;
+        }
+        .color-selected {
+            background-color: #000;
+            color: #fff;
+        }
+        .filter-selected {
+            background-color: #000;
+            color: #fff;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .product-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+        }
+        .filter-badge {
+            background-color: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .clear-filters {
+            background-color: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .clear-filters:hover {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notificationText">Producto añadido al carrito</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white border-b shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-black" onclick="showPage('home')">NIKE</a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-sm font-medium hover:underline underline-offset-4" onclick="showPage('home')">Inicio</a>
+                    <a href="#" class="text-sm font-medium hover:underline underline-offset-4" onclick="showPage('hombres')">Hombres</a>
+                    <a href="#" class="text-sm font-medium hover:underline underline-offset-4" onclick="showPage('mujeres')">Mujeres</a>
+                    <a href="#" class="text-sm font-medium hover:underline underline-offset-4" onclick="showPage('productos')">Productos</a>
+                </div>
+
+                <!-- Search and Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center">
+                        <input type="search" placeholder="Buscar productos..." class="px-3 py-2 border rounded-md text-sm w-64" onkeyup="searchProducts(this.value)">
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-md">
+                        <i class="fas fa-search text-gray-600"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-md relative" onclick="showPage('checkout')">
+                        <i class="fas fa-shopping-bag text-gray-600"></i>
+                        <span id="cartBadge" class="cart-badge hidden">0</span>
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden p-2 hover:bg-gray-100 rounded-md" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 md:hidden">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-xl font-bold">NIKE</span>
+                    <button onclick="toggleMobileMenu()" class="p-2">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" class="block text-lg font-medium" onclick="showPage('home'); toggleMobileMenu()">Inicio</a>
+                    <a href="#" class="block text-lg font-medium" onclick="showPage('hombres'); toggleMobileMenu()">Hombres</a>
+                    <a href="#" class="block text-lg font-medium" onclick="showPage('mujeres'); toggleMobileMenu()">Mujeres</a>
+                    <a href="#" class="block text-lg font-medium" onclick="showPage('productos'); toggleMobileMenu()">Productos</a>
+                    <div class="mt-4">
+                        <input type="search" placeholder="Buscar productos..." class="w-full px-3 py-2 border rounded-md text-sm" onkeyup="searchProducts(this.value)">
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="homePage" class="page">
+        <!-- Hero Section -->
+        <section class="hero-bg h-screen flex items-center justify-center text-white">
+            <div class="text-center px-4">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">RENDIMIENTO SIN LÍMITES</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+                    Descubre la nueva colección diseñada para superar tus límites
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="showPage('hombres')" class="bg-white text-black px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition">
+                        Comprar Hombres
+                    </button>
+                    <button onclick="showPage('mujeres')" class="bg-white text-black px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition">
+                        Comprar Mujeres
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Categories -->
+        <section class="py-16 px-4 bg-black text-white">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold mb-12 text-center">CATEGORÍAS DESTACADAS</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Running -->
+                    <div class="category-bg-1 h-96 rounded-lg flex flex-col justify-end p-6 group cursor-pointer" onclick="filterByCategory('running')">
+                        <h3 class="text-2xl font-bold mb-2">RUNNING</h3>
+                        <p class="mb-4">Supera tus límites con cada kilómetro</p>
+                        <button class="border border-white text-white px-4 py-2 rounded-md w-fit hover:bg-white hover:text-black transition">
+                            Explorar <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Training -->
+                    <div class="category-bg-2 h-96 rounded-lg flex flex-col justify-end p-6 group cursor-pointer" onclick="filterByCategory('training')">
+                        <h3 class="text-2xl font-bold mb-2">TRAINING</h3>
+                        <p class="mb-4">Equipamiento para llevar tu entrenamiento al siguiente nivel</p>
+                        <button class="border border-white text-white px-4 py-2 rounded-md w-fit hover:bg-white hover:text-black transition">
+                            Explorar <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Lifestyle -->
+                    <div class="category-bg-3 h-96 rounded-lg flex flex-col justify-end p-6 group cursor-pointer" onclick="filterByCategory('lifestyle')">
+                        <h3 class="text-2xl font-bold mb-2">LIFESTYLE</h3>
+                        <p class="mb-4">Estilo y comodidad para tu día a día</p>
+                        <button class="border border-white text-white px-4 py-2 rounded-md w-fit hover:bg-white hover:text-black transition">
+                            Explorar <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Releases -->
+        <section class="py-16 px-4 bg-white">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold mb-12 text-center">ÚLTIMOS LANZAMIENTOS</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="featuredProducts">
+                    <!-- Products will be loaded here -->
+                </div>
+                <div class="flex justify-center mt-12">
+                    <button onclick="showPage('productos')" class="bg-black text-white px-8 py-3 rounded-md font-medium hover:bg-gray-800 transition">
+                        Ver Todos los Productos
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Products Page (Universal) -->
+    <div id="productosPage" class="page hidden">
+        <div class="container mx-auto px-4 py-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold mb-2" id="pageTitle">Productos</h1>
+                <p class="text-gray-500" id="pageSubtitle">Descubre la colección de Nike</p>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div id="activeFilters" class="mb-6 hidden">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-sm font-medium">Filtros activos:</span>
+                    <div id="filterBadges" class="flex flex-wrap gap-1"></div>
+                    <button onclick="clearAllFilters()" class="clear-filters ml-2">
+                        <i class="fas fa-times mr-1"></i> Limpiar todo
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row">
+                <!-- Filters -->
+                <div class="w-full md:w-64 pr-0 md:pr-8 mb-8 md:mb-0">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg">Filtros</h3>
+                        <span id="productCount" class="text-sm text-gray-500">0 productos</span>
+                    </div>
+                    
+                    <!-- Gender Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Género</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="all" class="mr-2" onchange="applyFilters()" checked> Todos
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="men" class="mr-2" onchange="applyFilters()"> Hombres
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="women" class="mr-2" onchange="applyFilters()"> Mujeres
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Categorías</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 category-filter" value="running" onchange="applyFilters()"> Running
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 category-filter" value="training" onchange="applyFilters()"> Training
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 category-filter" value="lifestyle" onchange="applyFilters()"> Lifestyle
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 category-filter" value="basketball" onchange="applyFilters()"> Basketball
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 category-filter" value="yoga" onchange="applyFilters()"> Yoga
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sizes -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Tallas</h4>
+                        <div class="grid grid-cols-3 gap-2" id="sizeFilters">
+                            <!-- Size buttons will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Colors -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Colores</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Negro" onchange="applyFilters()"> Negro
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Blanco" onchange="applyFilters()"> Blanco
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Rojo" onchange="applyFilters()"> Rojo
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Azul" onchange="applyFilters()"> Azul
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Rosa" onchange="applyFilters()"> Rosa
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Morado" onchange="applyFilters()"> Morado
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Verde" onchange="applyFilters()"> Verde
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 color-filter" value="Gris" onchange="applyFilters()"> Gris
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Rango de Precio</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 price-filter" value="0-200000" onchange="applyFilters()"> Menos de $200.000
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 price-filter" value="200000-400000" onchange="applyFilters()"> $200.000 - $400.000
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 price-filter" value="400000-600000" onchange="applyFilters()"> $400.000 - $600.000
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 price-filter" value="600000-999999" onchange="applyFilters()"> Más de $600.000
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="flex-1">
+                    <div class="mb-4 flex justify-between items-center">
+                        <div class="text-sm text-gray-500">
+                            <span id="filteredProductCount">0</span> productos encontrados
+                        </div>
+                        <select id="sortSelect" class="px-3 py-2 border rounded-md text-sm" onchange="applyFilters()">
+                            <option value="default">Ordenar por</option>
+                            <option value="price-low">Precio: Menor a Mayor</option>
+                            <option value="price-high">Precio: Mayor a Menor</option>
+                            <option value="name">Nombre A-Z</option>
+                            <option value="newest">Más Recientes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productsGrid">
+                        <!-- Products will be loaded here -->
+                    </div>
+
+                    <!-- No Results Message -->
+                    <div id="noResults" class="text-center py-12 hidden">
+                        <i class="fas fa-search text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-medium text-gray-600 mb-2">No se encontraron productos</h3>
+                        <p class="text-gray-500 mb-4">Intenta ajustar tus filtros o buscar algo diferente</p>
+                        <button onclick="clearAllFilters()" class="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+                            Limpiar filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Men's Page -->
+    <div id="hombresPage" class="page hidden">
+        <!-- This will redirect to productos page with men filter -->
+    </div>
+
+    <!-- Women's Page -->
+    <div id="mujeresPage" class="page hidden">
+        <!-- This will redirect to productos page with women filter -->
+    </div>
+
+    <!-- Product Detail Page -->
+    <div id="productDetailPage" class="page hidden">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Product Images -->
+                <div class="space-y-4">
+                    <div id="mainProductImage" class="aspect-square bg-gray-100 rounded-lg"></div>
+                    <div class="grid grid-cols-4 gap-2" id="productThumbnails">
+                        <!-- Thumbnails will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="space-y-6">
+                    <div>
+                        <h1 id="productName" class="text-3xl font-bold">Nike Air Max 270</h1>
+                        <p id="productCategory" class="text-gray-500">Calzado para hombre</p>
+                        <div class="flex items-center mt-2">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="ml-2 text-sm text-gray-500">4.8 (124 reseñas)</span>
+                        </div>
+                    </div>
+
+                    <p id="productPrice" class="text-2xl font-bold">$599.900</p>
+
+                    <!-- Color Selection -->
+                    <div>
+                        <h3 class="font-medium mb-2">Color</h3>
+                        <div id="colorOptions" class="flex gap-2">
+                            <!-- Color options will be loaded here -->
+                        </div>
+                        <p id="colorError" class="text-red-500 text-sm mt-1 hidden">Por favor selecciona un color</p>
+                    </div>
+
+                    <!-- Size Selection -->
+                    <div>
+                        <h3 class="font-medium mb-2">Talla</h3>
+                        <div id="sizeOptions" class="grid grid-cols-4 gap-2">
+                            <!-- Size options will be loaded here -->
+                        </div>
+                        <p id="sizeError" class="text-red-500 text-sm mt-1 hidden">Por favor selecciona una talla</p>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <h3 class="font-medium mb-2">Cantidad</h3>
+                        <div class="flex items-center border rounded-md w-32">
+                            <button class="px-3 py-2 hover:bg-gray-100" onclick="decreaseQuantity()">-</button>
+                            <span id="quantity" class="flex-1 text-center">1</span>
+                            <button class="px-3 py-2 hover:bg-gray-100" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="flex-1 bg-black text-white py-3 rounded-md hover:bg-gray-800 transition" onclick="addToCartFromDetail()">
+                            <i class="fas fa-shopping-bag mr-2"></i>
+                            Añadir al carrito
+                        </button>
+                        <button class="flex-1 border border-gray-300 py-3 rounded-md hover:bg-gray-50 transition">
+                            <i class="fas fa-heart mr-2"></i>
+                            Añadir a favoritos
+                        </button>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="border-t pt-6">
+                        <h3 class="font-medium mb-2">Descripción</h3>
+                        <p id="productDescription" class="text-gray-600">
+                            <!-- Description will be loaded here -->
+                        </p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="border-t pt-6">
+                        <h3 class="font-medium mb-2">Características</h3>
+                        <ul id="productFeatures" class="list-disc pl-5 space-y-1 text-gray-600">
+                            <!-- Features will be loaded here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Page -->
+    <div id="checkoutPage" class="page hidden">
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-8">Finalizar compra</h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Checkout Form -->
+                <div class="lg:col-span-2">
+                    <form class="space-y-8">
+                        <!-- Contact Information -->
+                        <div>
+                            <h2 class="text-xl font-bold mb-4">Información de contacto</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Nombre</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded-md" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Apellido</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded-md" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Email</label>
+                                    <input type="email" class="w-full px-3 py-2 border rounded-md" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Teléfono</label>
+                                    <input type="tel" class="w-full px-3 py-2 border rounded-md" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="border-t pt-8">
+                            <h2 class="text-xl font-bold mb-4">Dirección de envío</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Dirección</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded-md" required>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Ciudad</label>
+                                        <input type="text" class="w-full px-3 py-2 border rounded-md" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Departamento</label>
+                                        <select class="w-full px-3 py-2 border rounded-md" required>
+                                            <option value="">Selecciona un departamento</option>
+                                            <option value="bogota">Bogotá D.C.</option>
+                                            <option value="antioquia">Antioquia</option>
+                                            <option value="valle">Valle del Cauca</option>
+                                            <option value="atlantico">Atlántico</option>
+                                            <option value="santander">Santander</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Código Postal</label>
+                                        <input type="text" class="w-full px-3 py-2 border rounded-md" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="border-t pt-8">
+                            <h2 class="text-xl font-bold mb-4">Método de pago</h2>
+                            <div class="space-y-4">
+                                <label class="flex items-center border rounded-md p-4 cursor-pointer">
+                                    <input type="radio" name="payment" value="tarjeta" class="mr-3" checked>
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    Tarjeta de crédito/débito
+                                </label>
+                                <label class="flex items-center border rounded-md p-4 cursor-pointer">
+                                    <input type="radio" name="payment" value="pse" class="mr-3">
+                                    PSE - Pago en línea
+                                </label>
+                                <label class="flex items-center border rounded-md p-4 cursor-pointer">
+                                    <input type="radio" name="payment" value="efecty" class="mr-3">
+                                    Efecty
+                                </label>
+                            </div>
+
+                            <!-- Credit Card Details -->
+                            <div id="cardDetails" class="mt-4 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Número de tarjeta</label>
+                                    <input type="text" placeholder="1234 5678 9012 3456" class="w-full px-3 py-2 border rounded-md">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Nombre en la tarjeta</label>
+                                    <input type="text" class="w-full px-3 py-2 border rounded-md">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Fecha de expiración (MM/AA)</label>
+                                        <input type="text" placeholder="MM/AA" class="w-full px-3 py-2 border rounded-md">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">CVV</label>
+                                        <input type="text" class="w-full px-3 py-2 border rounded-md">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800 transition" onclick="completePurchase(event)">
+                            Completar compra
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="space-y-6">
+                    <div class="border rounded-lg p-4">
+                        <h2 class="font-bold text-lg mb-4">Tu carrito</h2>
+                        <div id="cartItems" class="space-y-4">
+                            <!-- Cart items will be populated here -->
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Envío</span>
+                                <span>Gratis</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Impuestos (19%)</span>
+                                <span id="taxes">$0</span>
+                            </div>
+                            <hr>
+                            <div class="flex justify-between font-bold">
+                                <span>Total</span>
+                                <span id="total">$0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-lg p-4">
+                        <h2 class="font-bold text-lg mb-2">Código promocional</h2>
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="Ingresa tu código" class="flex-1 px-3 py-2 border rounded-md text-sm">
+                            <button class="px-4 py-2 border rounded-md hover:bg-gray-50 transition">Aplicar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 px-4">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="font-bold mb-4">PRODUCTOS</h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li>Calzado</li>
+                    <li>Ropa</li>
+                    <li>Accesorios</li>
+                    <li>Colecciones</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">AYUDA</h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li>Estado del pedido</li>
+                    <li>Envíos y entregas</li>
+                    <li>Devoluciones</li>
+                    <li>Contacto</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">ACERCA DE NIKE</h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li>Noticias</li>
+                    <li>Empleo</li>
+                    <li>Inversores</li>
+                    <li>Sostenibilidad</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">REDES SOCIALES</h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li>Instagram</li>
+                    <li>Facebook</li>
+                    <li>Twitter</li>
+                    <li>YouTube</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto mt-12 pt-6 border-t border-gray-800 text-sm text-gray-400">
+            <p>© 2023 Nike, Inc. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let quantity = 1;
+        let selectedSize = '';
+        let selectedColor = '';
+        let currentProductId = '';
+        let cart = JSON.parse(localStorage.getItem('nikeCart')) || [];
+        let currentFilters = {
+            gender: 'all',
+            categories: [],
+            sizes: [],
+            colors: [],
+            prices: [],
+            search: ''
+        };
+
+        // Product database with configurable images
+        const products = {
+            '1': {
+                name: 'Nike Air Max 270',
+                category: 'Calzado para hombre',
+                price: 599900,
+                gender: 'men',
+                type: 'running',
+                colors: ['Negro', 'Blanco', 'Rojo', 'Azul'],
+                sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5'],
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                description: 'El Nike Air Max 270 combina el look de los íconos Air Max con una innovadora unidad Air diseñada específicamente para el uso diario.',
+                features: [
+                    'Parte superior de malla para mayor transpirabilidad',
+                    'Unidad Max Air 270 para una amortiguación increíble',
+                    'Entresuela de espuma para mayor comodidad',
+                    'Suela de goma para mayor durabilidad y tracción'
+                ]
+            },
+            '2': {
+                name: 'Nike Dri-FIT ADV',
+                category: 'Camiseta para hombre',
+                price: 189900,
+                gender: 'men',
+                type: 'training',
+                colors: ['Negro', 'Blanco', 'Azul'],
+                sizes: ['S', 'M', 'L', 'XL'],
+                image: 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/a1572894-410f-41c5-b698-75da9f7a3eb9/M+NP+DF+SLIM+TOP+SS.png',
+                description: 'Camiseta de entrenamiento con tecnología Dri-FIT para mantenerte seco y cómodo.',
+                features: [
+                    'Tecnología Dri-FIT que absorbe el sudor',
+                    'Tejido ligero y transpirable',
+                    'Corte atlético para libertad de movimiento',
+                    'Costuras planas para mayor comodidad'
+                ]
+            },
+            '3': {
+                name: 'Nike Tech Fleece',
+                category: 'Pantalones para hombre',
+                price: 299900,
+                gender: 'men',
+                type: 'lifestyle',
+                colors: ['Negro', 'Gris'],
+                sizes: ['S', 'M', 'L', 'XL'],
+                image: 'https://www.sportline.com.co/media/catalog/product/f/b/fb8012-330_phsfm001-1000.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:&format=jpeg',
+                description: 'Pantalones Tech Fleece que combinan calidez y estilo para el uso diario.',
+                features: [
+                    'Tejido Tech Fleece ligero y cálido',
+                    'Bolsillos con cremallera para seguridad',
+                    'Puños elásticos para un ajuste perfecto',
+                    'Diseño moderno y versátil'
+                ]
+            },
+            '4': {
+                name: 'Nike ZoomX Vaporfly',
+                category: 'Calzado de running',
+                price: 799900,
+                gender: 'men',
+                type: 'running',
+                colors: ['Negro', 'Blanco', 'Verde'],
+                sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/O6tNAhlYzUT1OkiB/image.jpg',
+                description: 'Calzado de running de élite con tecnología ZoomX para máximo rendimiento.',
+                features: [
+                    'Espuma ZoomX ultraligera y reactiva',
+                    'Placa de fibra de carbono para propulsión',
+                    'Parte superior Vaporweave transpirable',
+                    'Diseñado para carreras de larga distancia'
+                ]
+            },
+            '5': {
+                name: 'Nike Metcon 8',
+                category: 'Calzado de training',
+                price: 499900,
+                gender: 'men',
+                type: 'training',
+                colors: ['Negro', 'Blanco', 'Rojo'],
+                sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/f4R5BkwJ5Vg93Mql/image.jpg',
+                description: 'Calzado de entrenamiento versátil para todo tipo de workouts.',
+                features: [
+                    'Suela estable para levantamiento de pesas',
+                    'Amortiguación reactiva para saltos',
+                    'Parte superior duradera y transpirable',
+                    'Tracción multidireccional'
+                ]
+            },
+            '6': {
+                name: 'Nike Therma-FIT',
+                category: 'Sudadera con capucha',
+                price: 259900,
+                gender: 'men',
+                type: 'lifestyle',
+                colors: ['Negro', 'Gris', 'Azul'],
+                sizes: ['S', 'M', 'L', 'XL'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/xx8Ic4Xrb4ch0efD/image.jpg',
+                description: 'Sudadera con capucha que te mantiene cálido en condiciones frías.',
+                features: [
+                    'Tecnología Therma-FIT para retener el calor',
+                    'Tejido suave y cómodo',
+                    'Capucha ajustable con cordón',
+                    'Bolsillo canguro frontal'
+                ]
+            },
+            '101': {
+                name: 'Nike Air Zoom Pegasus 39',
+                category: 'Calzado para mujer',
+                price: 549900,
+                gender: 'women',
+                type: 'running',
+                colors: ['Rosa', 'Blanco', 'Negro'],
+                sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/Y6tBNt1ar57AqyN9/image.jpg',
+                description: 'Calzado de running confiable con amortiguación reactiva para cada kilómetro.',
+                features: [
+                    'Unidades Zoom Air en antepié y talón',
+                    'Espuma React para comodidad duradera',
+                    'Parte superior de malla transpirable',
+                    'Suela Waffle para tracción superior'
+                ]
+            },
+            '102': {
+                name: 'Nike Sportswear Essential',
+                category: 'Camiseta para mujer',
+                price: 129900,
+                gender: 'women',
+                type: 'lifestyle',
+                colors: ['Rosa', 'Blanco', 'Negro'],
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/lUZwQ8mEqNMvHvws/image.jpg',
+                description: 'Camiseta básica esencial con el icónico logo de Nike.',
+                features: [
+                    'Algodón 100% suave y cómodo',
+                    'Corte relajado para uso diario',
+                    'Logo Nike bordado',
+                    'Fácil cuidado y lavado'
+                ]
+            },
+            '103': {
+                name: 'Nike One Luxe',
+                category: 'Leggings para mujer',
+                price: 219900,
+                gender: 'women',
+                type: 'yoga',
+                colors: ['Negro', 'Morado', 'Rosa'],
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/5suVy1BBdwFug7u3/image.jpg',
+                description: 'Leggings de lujo con tejido suave y soporte de compresión.',
+                features: [
+                    'Tejido Luxe ultrasuave',
+                    'Compresión de soporte medio',
+                    'Cintura alta para mayor cobertura',
+                    'Bolsillo lateral para almacenamiento'
+                ]
+            },
+            '104': {
+                name: 'Nike ZoomX Invincible Run',
+                category: 'Calzado de running',
+                price: 699900,
+                gender: 'women',
+                type: 'running',
+                colors: ['Rosa', 'Blanco', 'Negro'],
+                sizes: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/3SsIc3zrGQfTmWLP/image.jpg',
+                description: 'Máxima amortiguación para carreras largas y recuperación.',
+                features: [
+                    'Espuma ZoomX de máxima amortiguación',
+                    'Parte superior Flyknit transpirable',
+                    'Diseño rocker para transiciones suaves',
+                    'Ideal para carreras de larga distancia'
+                ]
+            },
+            '105': {
+                name: 'Nike Alate',
+                category: 'Sujetador deportivo',
+                price: 159900,
+                gender: 'women',
+                type: 'training',
+                colors: ['Rosa', 'Negro', 'Blanco'],
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/CDIZ6DfAb4QpcxaK/image.jpg',
+                description: 'Sujetador deportivo de soporte ligero para actividades de baja intensidad.',
+                features: [
+                    'Soporte ligero y cómodo',
+                    'Tejido Dri-FIT que absorbe el sudor',
+                    'Diseño sin costuras',
+                    'Tirantes ajustables'
+                ]
+            },
+            '106': {
+                name: 'Nike Therma-FIT ADV',
+                category: 'Chaqueta para mujer',
+                price: 329900,
+                gender: 'women',
+                type: 'lifestyle',
+                colors: ['Negro', 'Rosa', 'Blanco'],
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                image: 'https://assets.grok.com/users/9d71ad28-2b17-4e9e-8af3-29af9ace8349/generated/yaT2qwbb94yzruVk/image.jpg',
+                description: 'Chaqueta avanzada que combina calidez y estilo para el clima frío.',
+                features: [
+                    'Tecnología Therma-FIT ADV',
+                    'Aislamiento sintético ligero',
+                    'Capucha ajustable',
+                    'Bolsillos con cremallera'
+                ]
+            }
+        };
+
+        // Available sizes for filters
+        const allSizes = ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', 'XS', 'S', 'M', 'L', 'XL'];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+            updateCartDisplay();
+            loadFeaturedProducts();
+            generateSizeFilters();
+            applyFilters();
+        });
+
+        // Navigation functions
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+            
+            // Show selected page
+            let targetPage;
+            if (pageId === 'hombres') {
+                targetPage = document.getElementById('productosPage');
+                currentFilters.gender = 'men';
+                updatePageTitle('Hombres', 'Descubre la colección para hombres de Nike');
+                document.querySelector('input[name="gender"][value="men"]').checked = true;
+            } else if (pageId === 'mujeres') {
+                targetPage = document.getElementById('productosPage');
+                currentFilters.gender = 'women';
+                updatePageTitle('Mujeres', 'Descubre la colección para mujeres de Nike');
+                document.querySelector('input[name="gender"][value="women"]').checked = true;
+            } else if (pageId === 'productos') {
+                targetPage = document.getElementById('productosPage');
+                currentFilters.gender = 'all';
+                updatePageTitle('Productos', 'Descubre la colección de Nike');
+                document.querySelector('input[name="gender"][value="all"]').checked = true;
+            } else {
+                targetPage = document.getElementById(pageId + 'Page');
+            }
+            
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Apply filters if on products page
+            if (pageId === 'hombres' || pageId === 'mujeres' || pageId === 'productos') {
+                applyFilters();
+            }
+
+            // Update cart display if showing checkout page
+            if (pageId === 'checkout') {
+                updateCartDisplay();
+            }
+        }
+
+        function updatePageTitle(title, subtitle) {
+            document.getElementById('pageTitle').textContent = title;
+            document.getElementById('pageSubtitle').textContent = subtitle;
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Product loading functions
+        function loadFeaturedProducts() {
+            const container = document.getElementById('featuredProducts');
+            const featuredIds = ['1', '2', '3', '4'];
+            
+            container.innerHTML = '';
+            featuredIds.forEach(id => {
+                const product = products[id];
+                if (product) {
+                    container.innerHTML += createProductCard(id, product);
+                }
+            });
+        }
+
+        function createProductCard(id, product) {
+            return `
+                <div class="product-card group cursor-pointer bg-white rounded-lg shadow-sm hover:shadow-md transition-all" onclick="showProductDetail('${id}')">
+                    <div class="aspect-square bg-gray-100 mb-4 rounded-md overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="font-medium">${product.name}</h3>
+                    <p class="text-gray-500 mb-2">${product.category}</p>
+                    <p class="font-semibold mb-4">$${product.price.toLocaleString('es-CO')}</p>
+                    <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); quickAddToCart('${id}')">
+                        Añadir al carrito
+                    </button>
+                </div>
+            `;
+        }
+
+        // Filter functions
+        function generateSizeFilters() {
+            const container = document.getElementById('sizeFilters');
+            container.innerHTML = '';
+            
+            allSizes.forEach(size => {
+                container.innerHTML += `
+                    <button class="border p-2 text-sm hover:bg-gray-100 size-filter-btn" data-size="${size}" onclick="toggleSizeFilter('${size}')">
+                        ${size}
+                    </button>
+                `;
+            });
+        }
+
+        function toggleSizeFilter(size) {
+            const button = document.querySelector(`[data-size="${size}"]`);
+            const index = currentFilters.sizes.indexOf(size);
+            
+            if (index > -1) {
+                currentFilters.sizes.splice(index, 1);
+                button.classList.remove('filter-selected');
+            } else {
+                currentFilters.sizes.push(size);
+                button.classList.add('filter-selected');
+            }
+            
+            applyFilters();
+        }
+
+        function applyFilters() {
+            // Get gender filter
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            if (genderRadio) {
+                currentFilters.gender = genderRadio.value;
+            }
+
+            // Get category filters
+            const categoryCheckboxes = document.querySelectorAll('.category-filter:checked');
+            currentFilters.categories = Array.from(categoryCheckboxes).map(cb => cb.value);
+
+            // Get color filters
+            const colorCheckboxes = document.querySelectorAll('.color-filter:checked');
+            currentFilters.colors = Array.from(colorCheckboxes).map(cb => cb.value);
+
+            // Get price filters
+            const priceCheckboxes = document.querySelectorAll('.price-filter:checked');
+            currentFilters.prices = Array.from(priceCheckboxes).map(cb => cb.value);
+
+            // Filter and display products
+            const filteredProducts = getFilteredProducts();
+            displayProducts(filteredProducts);
+            updateFilterDisplay();
+        }
+
+        function getFilteredProducts() {
+            let filtered = Object.entries(products).map(([id, product]) => ({...product, id}));
+
+            // Apply gender filter
+            if (currentFilters.gender !== 'all') {
+                filtered = filtered.filter(product => product.gender === currentFilters.gender);
+            }
+
+            // Apply category filter
+            if (currentFilters.categories.length > 0) {
+                filtered = filtered.filter(product => currentFilters.categories.includes(product.type));
+            }
+
+            // Apply size filter
+            if (currentFilters.sizes.length > 0) {
+                filtered = filtered.filter(product => 
+                    currentFilters.sizes.some(size => product.sizes.includes(size))
+                );
+            }
+
+            // Apply color filter
+            if (currentFilters.colors.length > 0) {
+                filtered = filtered.filter(product => 
+                    currentFilters.colors.some(color => product.colors.includes(color))
+                );
+            }
+
+            // Apply price filter
+            if (currentFilters.prices.length > 0) {
+                filtered = filtered.filter(product => {
+                    return currentFilters.prices.some(priceRange => {
+                        const [min, max] = priceRange.split('-').map(Number);
+                        return product.price >= min && product.price <= max;
+                    });
+                });
+            }
+
+            // Apply search filter
+            if (currentFilters.search) {
+                const searchTerm = currentFilters.search.toLowerCase();
+                filtered = filtered.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) ||
+                    product.category.toLowerCase().includes(searchTerm) ||
+                    product.type.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Apply sorting
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                const sortValue = sortSelect.value;
+                switch (sortValue) {
+                    case 'price-low':
+                        filtered.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-high':
+                        filtered.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'name':
+                        filtered.sort((a, b) => a.name.localeCompare(b.name));
+                        break;
+                    case 'newest':
+                        filtered.reverse();
+                        break;
+                }
+            }
+
+            return filtered;
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResults');
+            const productCount = document.getElementById('filteredProductCount');
+
+            if (products.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                container.innerHTML = products.map(product => createProductCard(product.id, product)).join('');
+            }
+
+            if (productCount) {
+                productCount.textContent = products.length;
+            }
+        }
+
+        function updateFilterDisplay() {
+            const activeFiltersDiv = document.getElementById('activeFilters');
+            const filterBadgesDiv = document.getElementById('filterBadges');
+            
+            let hasActiveFilters = false;
+            let badgesHTML = '';
+
+            // Gender filter
+            if (currentFilters.gender !== 'all') {
+                hasActiveFilters = true;
+                const genderText = currentFilters.gender === 'men' ? 'Hombres' : 'Mujeres';
+                badgesHTML += `<span class="filter-badge" onclick="clearGenderFilter()">${genderText} <i class="fas fa-times ml-1"></i></span>`;
+            }
+
+            // Category filters
+            currentFilters.categories.forEach(category => {
+                hasActiveFilters = true;
+                badgesHTML += `<span class="filter-badge" onclick="removeFilter('categories', '${category}')">${category} <i class="fas fa-times ml-1"></i></span>`;
+            });
+
+            // Size filters
+            currentFilters.sizes.forEach(size => {
+                hasActiveFilters = true;
+                badgesHTML += `<span class="filter-badge" onclick="removeFilter('sizes', '${size}')">Talla ${size} <i class="fas fa-times ml-1"></i></span>`;
+            });
+
+            // Color filters
+            currentFilters.colors.forEach(color => {
+                hasActiveFilters = true;
+                badgesHTML += `<span class="filter-badge" onclick="removeFilter('colors', '${color}')">${color} <i class="fas fa-times ml-1"></i></span>`;
+            });
+
+            // Price filters
+            currentFilters.prices.forEach(price => {
+                hasActiveFilters = true;
+                const [min, max] = price.split('-');
+                const priceText = max === '999999' ? `Más de $${Number(min).toLocaleString('es-CO')}` : 
+                                 `$${Number(min).toLocaleString('es-CO')} - $${Number(max).toLocaleString('es-CO')}`;
+                badgesHTML += `<span class="filter-badge" onclick="removeFilter('prices', '${price}')">${priceText} <i class="fas fa-times ml-1"></i></span>`;
+            });
+
+            // Search filter
+            if (currentFilters.search) {
+                hasActiveFilters = true;
+                badgesHTML += `<span class="filter-badge" onclick="clearSearch()">Búsqueda: "${currentFilters.search}" <i class="fas fa-times ml-1"></i></span>`;
+            }
+
+            if (hasActiveFilters) {
+                activeFiltersDiv.classList.remove('hidden');
+                filterBadgesDiv.innerHTML = badgesHTML;
+            } else {
+                activeFiltersDiv.classList.add('hidden');
+            }
+        }
+
+        function removeFilter(filterType, value) {
+            const index = currentFilters[filterType].indexOf(value);
+            if (index > -1) {
+                currentFilters[filterType].splice(index, 1);
+            }
+
+            // Update UI
+            if (filterType === 'categories') {
+                const checkbox = document.querySelector(`.category-filter[value="${value}"]`);
+                if (checkbox) checkbox.checked = false;
+            } else if (filterType === 'colors') {
+                const checkbox = document.querySelector(`.color-filter[value="${value}"]`);
+                if (checkbox) checkbox.checked = false;
+            } else if (filterType === 'sizes') {
+                const button = document.querySelector(`[data-size="${value}"]`);
+                if (button) button.classList.remove('filter-selected');
+            } else if (filterType === 'prices') {
+                const checkbox = document.querySelector(`.price-filter[value="${value}"]`);
+                if (checkbox) checkbox.checked = false;
+            }
+
+            applyFilters();
+        }
+
+        function clearGenderFilter() {
+            currentFilters.gender = 'all';
+            document.querySelector('input[name="gender"][value="all"]').checked = true;
+            applyFilters();
+        }
+
+        function clearSearch() {
+            currentFilters.search = '';
+            const searchInputs = document.querySelectorAll('input[type="search"]');
+            searchInputs.forEach(input => input.value = '');
+            applyFilters();
+        }
+
+        function clearAllFilters() {
+            currentFilters = {
+                gender: 'all',
+                categories: [],
+                sizes: [],
+                colors: [],
+                prices: [],
+                search: ''
+            };
+
+            // Reset UI
+            document.querySelector('input[name="gender"][value="all"]').checked = true;
+            document.querySelectorAll('.category-filter').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.color-filter').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.price-filter').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.size-filter-btn').forEach(btn => btn.classList.remove('filter-selected'));
+            document.querySelectorAll('input[type="search"]').forEach(input => input.value = '');
+            document.getElementById('sortSelect').value = 'default';
+
+            applyFilters();
+        }
+
+        function filterByCategory(category) {
+            showPage('productos');
+            currentFilters.categories = [category];
+            document.querySelector(`.category-filter[value="${category}"]`).checked = true;
+            applyFilters();
+        }
+
+        function searchProducts(searchTerm) {
+            currentFilters.search = searchTerm;
+            if (document.getElementById('productosPage').classList.contains('hidden')) {
+                showPage('productos');
+            }
+            applyFilters();
+        }
+
+        // Product detail functions
+        function showProductDetail(productId) {
+            currentProductId = productId;
+            const product = products[productId];
+            
+            if (product) {
+                document.getElementById('productName').textContent = product.name;
+                document.getElementById('productCategory').textContent = product.category;
+                document.getElementById('productPrice').textContent = `$${product.price.toLocaleString('es-CO')}`;
+                document.getElementById('productDescription').textContent = product.description;
+                
+                // Load main image
+                const mainImage = document.getElementById('mainProductImage');
+                mainImage.style.backgroundImage = `url("${product.image}")`;
+                mainImage.style.backgroundSize = 'cover';
+                mainImage.style.backgroundPosition = 'center';
+                
+                // Load thumbnails
+                const thumbnailsContainer = document.getElementById('productThumbnails');
+                thumbnailsContainer.innerHTML = '';
+                for (let i = 0; i < 4; i++) {
+                    thumbnailsContainer.innerHTML += `
+                        <div class="aspect-square bg-gray-100 rounded-md cursor-pointer" 
+                             style="background-image: url('${product.image}'); background-size: cover; background-position: center;"
+                             onclick="changeMainImage('${product.image}')">
+                        </div>
+                    `;
+                }
+                
+                // Load color options
+                const colorContainer = document.getElementById('colorOptions');
+                colorContainer.innerHTML = '';
+                product.colors.forEach(color => {
+                    colorContainer.innerHTML += `
+                        <button class="px-3 py-1 border rounded-full hover:bg-gray-100" onclick="selectColor(this, '${color}')">
+                            ${color}
+                        </button>
+                    `;
+                });
+                
+                // Load size options
+                const sizeContainer = document.getElementById('sizeOptions');
+                sizeContainer.innerHTML = '';
+                product.sizes.forEach(size => {
+                    sizeContainer.innerHTML += `
+                        <button class="h-10 border rounded-md hover:bg-gray-100" onclick="selectSize(this, '${size}')">
+                            ${size}
+                        </button>
+                    `;
+                });
+                
+                // Load features
+                const featuresContainer = document.getElementById('productFeatures');
+                featuresContainer.innerHTML = '';
+                product.features.forEach(feature => {
+                    featuresContainer.innerHTML += `<li>${feature}</li>`;
+                });
+            }
+            
+            // Reset selections
+            selectedSize = '';
+            selectedColor = '';
+            quantity = 1;
+            document.getElementById('quantity').textContent = quantity;
+            
+            // Hide error messages
+            document.getElementById('sizeError').classList.add('hidden');
+            document.getElementById('colorError').classList.add('hidden');
+            
+            showPage('productDetail');
+        }
+
+        function changeMainImage(imageUrl) {
+            const mainImage = document.getElementById('mainProductImage');
+            mainImage.style.backgroundImage = `url("${imageUrl}")`;
+        }
+
+        function selectSize(button, size) {
+            // Remove previous selection
+            document.querySelectorAll('#sizeOptions button').forEach(btn => btn.classList.remove('size-selected'));
+            
+            // Add selection to clicked button
+            button.classList.add('size-selected');
+            selectedSize = size;
+            
+            // Hide error message
+            document.getElementById('sizeError').classList.add('hidden');
+        }
+
+        function selectColor(button, color) {
+            // Remove previous selection
+            document.querySelectorAll('#colorOptions button').forEach(btn => btn.classList.remove('color-selected'));
+            
+            // Add selection to clicked button
+            button.classList.add('color-selected');
+            selectedColor = color;
+            
+            // Hide error message
+            document.getElementById('colorError').classList.add('hidden');
+        }
+
+        function increaseQuantity() {
+            quantity++;
+            document.getElementById('quantity').textContent = quantity;
+        }
+
+        function decreaseQuantity() {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('quantity').textContent = quantity;
+            }
+        }
+
+        // Cart functions
+        function quickAddToCart(productId) {
+            const product = products[productId];
+            if (product) {
+                const item = {
+                    id: productId + '_' + Date.now(),
+                    productId: productId,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    size: 'Talla única',
+                    color: 'Color estándar',
+                    image: product.image
+                };
+
+                cart.push(item);
+                saveCart();
+                updateCartBadge();
+                showNotification(`${product.name} añadido al carrito`);
+            }
+        }
+
+        function addToCartFromDetail() {
+            // Validate selections
+            let hasError = false;
+            
+            if (!selectedSize) {
+                document.getElementById('sizeError').classList.remove('hidden');
+                hasError = true;
+            }
+            
+            if (!selectedColor) {
+                document.getElementById('colorError').classList.remove('hidden');
+                hasError = true;
+            }
+            
+            if (hasError) {
+                return;
+            }
+
+            const product = products[currentProductId];
+            const item = {
+                id: currentProductId + '_' + Date.now(),
+                productId: currentProductId,
+                name: product.name,
+                price: product.price,
+                quantity: quantity,
+                size: selectedSize,
+                color: selectedColor,
+                image: product.image
+            };
+
+            cart.push(item);
+            saveCart();
+            updateCartBadge();
+            showNotification(`${product.name} añadido al carrito`);
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            saveCart();
+            updateCartBadge();
+            updateCartDisplay();
+        }
+
+        function updateCartQuantity(itemId, newQuantity) {
+            const item = cart.find(item => item.id === itemId);
+            if (item && newQuantity > 0) {
+                item.quantity = newQuantity;
+                saveCart();
+                updateCartBadge();
+                updateCartDisplay();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('nikeCart', JSON.stringify(cart));
+        }
+
+        function updateCartBadge() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartBadge');
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const subtotalElement = document.getElementById('subtotal');
+            const taxesElement = document.getElementById('taxes');
+            const totalElement = document.getElementById('total');
+
+            if (!cartItemsContainer) return;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-gray-500">Tu carrito está vacío</p>';
+                if (subtotalElement) subtotalElement.textContent = '$0';
+                if (taxesElement) taxesElement.textContent = '$0';
+                if (totalElement) totalElement.textContent = '$0';
+                return;
+            }
+
+            let subtotal = 0;
+            cartItemsContainer.innerHTML = '';
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const cartItemHTML = `
+                    <div class="flex gap-4 border-b pb-4">
+                        <div class="w-20 h-20 bg-gray-100 rounded-md flex-shrink-0" style="background-image: url('${item.image}'); background-size: cover; background-position: center;"></div>
+                        <div class="flex-1">
+                            <h3 class="font-medium">${item.name}</h3>
+                            <p class="text-sm text-gray-500">${item.color} | Talla: ${item.size}</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="flex items-center border rounded-md">
+                                    <button class="px-2 py-1 hover:bg-gray-100" onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                                    <span class="px-3">${item.quantity}</span>
+                                    <button class="px-2 py-1 hover:bg-gray-100" onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-medium">$${itemTotal.toLocaleString('es-CO')}</span>
+                                    <button class="block text-red-500 text-sm hover:underline" onclick="removeFromCart('${item.id}')">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cartItemsContainer.innerHTML += cartItemHTML;
+            });
+
+            const taxes = Math.round(subtotal * 0.19);
+            const total = subtotal + taxes;
+
+            if (subtotalElement) subtotalElement.textContent = `$${subtotal.toLocaleString('es-CO')}`;
+            if (taxesElement) taxesElement.textContent = `$${taxes.toLocaleString('es-CO')}`;
+            if (totalElement) totalElement.textContent = `$${total.toLocaleString('es-CO')}`;
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function completePurchase(event) {
+            event.preventDefault();
+            
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            // Clear cart
+            cart = [];
+            saveCart();
+            updateCartBadge();
+            
+            alert('¡Pedido realizado con éxito! Gracias por tu compra.');
+            showPage('home');
+        }
+
+        // Event listeners
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = event.target.closest('button');
+            
+            if (!mobileMenu.contains(event.target) && !menuButton) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('change', function(event) {
+            if (event.target.name === 'payment') {
+                const cardDetails = document.getElementById('cardDetails');
+                if (event.target.value === 'tarjeta') {
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardDetails.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
